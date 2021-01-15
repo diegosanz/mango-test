@@ -11,6 +11,7 @@ enum RangeControls {
 const RangeStyles = styled.div`
   .range {
     display: flex;
+    user-select: none;
 
     &__boundaries {
       max-width: 100%;
