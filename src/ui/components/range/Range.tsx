@@ -61,19 +61,21 @@ const Range: FC<RangeProps> = ({ values }) => {
     values: [],
   });
 
-  const [value, setValue] = useState<{
-    min: number;
-    max: number;
-    lastActiveControl: RangeControls;
-  }>({
-    min: 0,
-    max: 0,
-    lastActiveControl: RangeControls.MIN,
-  });
+  // const [value, setValue] = useState<{
+  //   min: number;
+  //   max: number;
+  // }>({
+  //   min: 0,
+  //   max: 0,
+  // });
 
   const [moving, setMoving] = useState<{
-    lastActiveControl?: RangeControls;
-  }>({});
+    lastActiveControl: RangeControls;
+    released: boolean;
+  }>({
+    lastActiveControl: RangeControls.MIN,
+    released: true,
+  });
 
   useEffect(() => {
     if (Array.isArray(values)) {
@@ -115,6 +117,7 @@ const Range: FC<RangeProps> = ({ values }) => {
   ) => {
     setMoving({
       lastActiveControl: el,
+      released: false,
     });
   };
 
@@ -124,7 +127,7 @@ const Range: FC<RangeProps> = ({ values }) => {
       | React.TouchEvent<HTMLDivElement>,
     el: RangeControls
   ) => {
-    if (moving.lastActiveControl === el) {
+    if (moving.lastActiveControl === el && !moving.released) {
       if (rangeBarRef.current) {
         const leftSpace = rangeBarRef.current.offsetLeft;
         const rangeWidth = rangeBarRef.current.clientWidth;
@@ -150,7 +153,8 @@ const Range: FC<RangeProps> = ({ values }) => {
 
   const onStopMoving = () => {
     setMoving({
-      lastActiveControl: undefined,
+      ...moving,
+      released: true,
     });
   };
 
@@ -176,11 +180,12 @@ const Range: FC<RangeProps> = ({ values }) => {
               onMoving(ev, RangeControls.MIN);
             }}
             onMouseOut={onStopMoving}
+            onMouseUp={onStopMoving}
             onTouchEnd={onStopMoving}
             onTouchCancel={onStopMoving}
             className="range__bar__control m-min"
             style={
-              value.lastActiveControl === RangeControls.MIN
+              moving.lastActiveControl === RangeControls.MIN
                 ? { zIndex: 1 }
                 : { zIndex: 0 }
             }
@@ -200,11 +205,12 @@ const Range: FC<RangeProps> = ({ values }) => {
               onMoving(ev, RangeControls.MAX);
             }}
             onMouseOut={onStopMoving}
+            onMouseUp={onStopMoving}
             onTouchEnd={onStopMoving}
             onTouchCancel={onStopMoving}
             className="range__bar__control m-max"
             style={
-              value.lastActiveControl === RangeControls.MAX
+              moving.lastActiveControl === RangeControls.MAX
                 ? { zIndex: 1 }
                 : { zIndex: 0 }
             }
