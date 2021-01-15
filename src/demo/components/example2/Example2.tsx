@@ -5,7 +5,7 @@ const Exercise2: FC = () => {
   return (
     <div className="exercise2">
       <h1>Exercise 2</h1>
-      <Range />
+      <Range values={[10, 1, 3, 8]} />
     </div>
   );
 };
