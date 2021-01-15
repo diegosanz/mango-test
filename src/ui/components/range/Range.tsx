@@ -1,7 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useRef } from "react";
 import InvisibleInput from "../invisible-input/InvisibleInput";
 import styled from "styled-components";
 import RangeControl from "../range-control/RangeControl";
+
+enum RangeControls {
+  MIN,
+  MAX,
+}
 
 const RangeStyles = styled.div`
   .range {
@@ -20,6 +25,14 @@ const RangeStyles = styled.div`
 
       &__control {
         position: absolute;
+
+        /* TODO: borrar estos colores */
+        &.m-max {
+          background-color: red;
+        }
+        &.m-min {
+          background-color: blue;
+        }
       }
 
       &__rail {
@@ -36,6 +49,8 @@ interface RangeProps {
 }
 
 const Range: FC<RangeProps> = ({ values }) => {
+  const rangeBarRef = useRef<HTMLDivElement>(null);
+
   const [rangeState, setRangeState] = useState<{
     inputEditable: boolean;
     limits: { min: number; max: number };
@@ -49,12 +64,16 @@ const Range: FC<RangeProps> = ({ values }) => {
   const [value, setValue] = useState<{
     min: number;
     max: number;
-    lastActiveControl: "MIN" | "MAX";
+    lastActiveControl: RangeControls;
   }>({
     min: 0,
     max: 0,
-    lastActiveControl: "MIN",
+    lastActiveControl: RangeControls.MIN,
   });
+
+  const [moving, setMoving] = useState<{
+    lastActiveControl?: RangeControls;
+  }>({});
 
   useEffect(() => {
     if (Array.isArray(values)) {
@@ -88,6 +107,53 @@ const Range: FC<RangeProps> = ({ values }) => {
     }
   }, [values]);
 
+  const onStartMoving = (
+    ev:
+      | React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+      | React.TouchEvent<HTMLDivElement>,
+    el: RangeControls
+  ) => {
+    setMoving({
+      lastActiveControl: el,
+    });
+  };
+
+  const onMoving = (
+    ev:
+      | React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+      | React.TouchEvent<HTMLDivElement>,
+    el: RangeControls
+  ) => {
+    if (moving.lastActiveControl === el) {
+      if (rangeBarRef.current) {
+        const leftSpace = rangeBarRef.current.offsetLeft;
+        const rangeWidth = rangeBarRef.current.clientWidth;
+        const clientX: number =
+          ev.nativeEvent instanceof TouchEvent
+            ? (ev as any).touches[0].clientX
+            : ev.nativeEvent instanceof MouseEvent
+            ? (ev as any).clientX
+            : 0;
+
+        const percentajeReal = 100 / (rangeWidth / (clientX - leftSpace));
+        let percentaje = percentajeReal;
+        if (percentaje > 100) {
+          percentaje = 100;
+        } else if (percentaje < 0) {
+          percentaje = 0;
+        }
+
+        ev.currentTarget.style.left = percentaje + "%";
+      }
+    }
+  };
+
+  const onStopMoving = () => {
+    setMoving({
+      lastActiveControl: undefined,
+    });
+  };
+
   return (
     <RangeStyles>
       <div className="range">
@@ -95,18 +161,52 @@ const Range: FC<RangeProps> = ({ values }) => {
           value={rangeState?.limits.min}
           onChange={(ev) => console.log(ev)}
         />
-        <div className="range__bar">
+        <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
+            onMouseDown={(ev) => {
+              onStartMoving(ev, RangeControls.MIN);
+            }}
+            onTouchStart={(ev) => {
+              onStartMoving(ev, RangeControls.MIN);
+            }}
+            onMouseMove={(ev) => {
+              onMoving(ev, RangeControls.MIN);
+            }}
+            onTouchMove={(ev) => {
+              onMoving(ev, RangeControls.MIN);
+            }}
+            onMouseOut={onStopMoving}
+            onTouchEnd={onStopMoving}
+            onTouchCancel={onStopMoving}
             className="range__bar__control m-min"
             style={
-              value.lastActiveControl === "MIN" ? { zIndex: 1 } : { zIndex: 0 }
+              value.lastActiveControl === RangeControls.MIN
+                ? { zIndex: 1 }
+                : { zIndex: 0 }
             }
           />
 
           <RangeControl
+            onMouseDown={(ev) => {
+              onStartMoving(ev, RangeControls.MAX);
+            }}
+            onTouchStart={(ev) => {
+              onStartMoving(ev, RangeControls.MAX);
+            }}
+            onMouseMove={(ev) => {
+              onMoving(ev, RangeControls.MAX);
+            }}
+            onTouchMove={(ev) => {
+              onMoving(ev, RangeControls.MAX);
+            }}
+            onMouseOut={onStopMoving}
+            onTouchEnd={onStopMoving}
+            onTouchCancel={onStopMoving}
             className="range__bar__control m-max"
             style={
-              value.lastActiveControl === "MAX" ? { zIndex: 1 } : { zIndex: 0 }
+              value.lastActiveControl === RangeControls.MAX
+                ? { zIndex: 1 }
+                : { zIndex: 0 }
             }
           />
 
