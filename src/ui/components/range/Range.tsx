@@ -4,7 +4,10 @@ import styled from "styled-components";
 import RangeControl from "../range-control/RangeControl";
 import { generatePercentages } from "../../../misc/utils/value-percent-generator";
 import { RangeValue } from "../../../misc/models/RangeValue";
-import { closestRangeValue } from "../../../misc/utils/closestRangeValue";
+import {
+  closestRangeValueByPercentage,
+  closestRangeValueByValue,
+} from "../../../misc/utils/closestRangeValue";
 
 enum RangeControls {
   MIN,
@@ -107,23 +110,24 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
       };
     }
 
+    const min = value?.min || rangeState.limits.min;
+    const max = value?.max || rangeState.limits.max;
+
+    setVal({
+      min,
+      max,
+    });
+
     setRangeState({
       ...rangeStateTemp,
       limits: {
         min: rangeStateTemp.options[0].value,
         max: rangeStateTemp.options[rangeStateTemp.options.length - 1].value,
       },
+      maxPos: closestRangeValueByValue(max, rangeStateTemp.options).percent,
+      minPos: closestRangeValueByValue(min, rangeStateTemp.options).percent,
     });
   }, [options, value]);
-
-  useEffect(() => {
-    (() => {
-      setVal({
-        min: value?.min || rangeState.limits.min,
-        max: value?.max || rangeState.limits.max,
-      });
-    })();
-  }, []);
 
   const onStartMoving = (el: RangeControls) => {
     setRangeState({
@@ -158,14 +162,32 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
         }
 
         if (rangeState.lastActiveControl === RangeControls.MIN) {
+          const minValue = closestRangeValueByPercentage(
+            rangeState.minPos,
+            rangeState.options
+          );
+
           setRangeState({
             ...rangeState,
             minPos: percentaje,
           });
+          setVal({
+            ...val,
+            min: minValue.value,
+          });
         } else if (rangeState.lastActiveControl === RangeControls.MAX) {
+          const maxValue = closestRangeValueByPercentage(
+            rangeState.maxPos,
+            rangeState.options
+          );
+
           setRangeState({
             ...rangeState,
             maxPos: percentaje,
+          });
+          setVal({
+            ...val,
+            max: maxValue.value,
           });
         }
       }
@@ -173,18 +195,51 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
   };
 
   const onStopMoving = () => {
-    const minValue = closestRangeValue(rangeState.minPos, rangeState.options);
-    const maxValue = closestRangeValue(rangeState.maxPos, rangeState.options);
+    const minValue = closestRangeValueByPercentage(
+      rangeState.minPos,
+      rangeState.options
+    );
+    const maxValue = closestRangeValueByPercentage(
+      rangeState.maxPos,
+      rangeState.options
+    );
+
     setRangeState({
       ...rangeState,
       released: true,
-      minPos: minValue.percent,
-      maxPos: maxValue.percent,
     });
+
     setVal({
       min: minValue.value,
       max: maxValue.value,
     });
+
+    emitValue({
+      min: minValue.value,
+      max: maxValue.value,
+    });
+  };
+
+  const updateValue = () => {
+    const minValue = closestRangeValueByPercentage(
+      rangeState.minPos,
+      rangeState.options
+    );
+    const maxValue = closestRangeValueByPercentage(
+      rangeState.maxPos,
+      rangeState.options
+    );
+
+    setRangeState({
+      ...rangeState,
+      released: true,
+    });
+
+    setVal({
+      min: minValue.value,
+      max: maxValue.value,
+    });
+
     emitValue({
       min: minValue.value,
       max: maxValue.value,
