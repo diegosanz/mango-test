@@ -26,14 +26,6 @@ const RangeStyles = styled.div`
 
       &__control {
         position: absolute;
-
-        /* TODO: borrar estos colores */
-        &.m-max {
-          background-color: red;
-        }
-        &.m-min {
-          background-color: blue;
-        }
       }
 
       &__rail {
