@@ -51,6 +51,8 @@ interface RangeProps {
 
 const Range: FC<RangeProps> = ({ values }) => {
   const rangeBarRef = useRef<HTMLDivElement>(null);
+  const rangeControlMinRef = useRef<HTMLDivElement>(null);
+  const rangeControlMaxRef = useRef<HTMLDivElement>(null);
 
   const [rangeState, setRangeState] = useState<{
     inputEditable: boolean;
@@ -120,10 +122,9 @@ const Range: FC<RangeProps> = ({ values }) => {
   const onMoving = (
     ev:
       | React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
-      | React.TouchEvent<HTMLDivElement>,
-    el: RangeControls
+      | React.TouchEvent<HTMLDivElement>
   ) => {
-    if (moving.lastActiveControl === el && !moving.released) {
+    if (!moving.released) {
       if (rangeBarRef.current) {
         const leftSpace = rangeBarRef.current.offsetLeft;
         const rangeWidth = rangeBarRef.current.clientWidth;
@@ -135,14 +136,24 @@ const Range: FC<RangeProps> = ({ values }) => {
             : 0;
 
         const percentajeReal = 100 / (rangeWidth / (clientX - leftSpace));
-        let percentaje = percentajeReal;
-        if (percentaje > 100) {
-          percentaje = 100;
-        } else if (percentaje < 0) {
-          percentaje = 0;
+        let percentaje = `${percentajeReal}%`;
+        if (percentajeReal > 100) {
+          percentaje = "100%";
+        } else if (percentajeReal < 0) {
+          percentaje = "0";
         }
 
-        ev.currentTarget.style.left = percentaje + "%";
+        if (
+          moving.lastActiveControl === RangeControls.MIN &&
+          rangeControlMinRef.current
+        ) {
+          rangeControlMinRef.current.style.left = percentaje;
+        } else if (
+          moving.lastActiveControl === RangeControls.MAX &&
+          rangeControlMaxRef.current
+        ) {
+          rangeControlMaxRef.current.style.left = percentaje;
+        }
       }
     }
   };
@@ -161,24 +172,27 @@ const Range: FC<RangeProps> = ({ values }) => {
           value={rangeState?.limits.min}
           onChange={(ev) => console.log(ev)}
         />
-        <div className="range__bar" ref={rangeBarRef}>
+        <div
+          className="range__bar"
+          ref={rangeBarRef}
+          onMouseMove={(ev) => {
+            onMoving(ev);
+          }}
+          onTouchMove={(ev) => {
+            onMoving(ev);
+          }}
+          onMouseUp={onStopMoving}
+          onTouchEnd={onStopMoving}
+          onTouchCancel={onStopMoving}
+        >
           <RangeControl
+            ref={rangeControlMinRef}
             onMouseDown={() => {
               onStartMoving(RangeControls.MIN);
             }}
             onTouchStart={() => {
               onStartMoving(RangeControls.MIN);
             }}
-            onMouseMove={(ev) => {
-              onMoving(ev, RangeControls.MIN);
-            }}
-            onTouchMove={(ev) => {
-              onMoving(ev, RangeControls.MIN);
-            }}
-            onMouseOut={onStopMoving}
-            onMouseUp={onStopMoving}
-            onTouchEnd={onStopMoving}
-            onTouchCancel={onStopMoving}
             className="range__bar__control m-min"
             style={
               moving.lastActiveControl === RangeControls.MIN
@@ -188,22 +202,14 @@ const Range: FC<RangeProps> = ({ values }) => {
           />
 
           <RangeControl
+            ref={rangeControlMaxRef}
             onMouseDown={() => {
               onStartMoving(RangeControls.MAX);
             }}
             onTouchStart={() => {
               onStartMoving(RangeControls.MAX);
             }}
-            onMouseMove={(ev) => {
-              onMoving(ev, RangeControls.MAX);
-            }}
-            onTouchMove={(ev) => {
-              onMoving(ev, RangeControls.MAX);
-            }}
             onMouseOut={onStopMoving}
-            onMouseUp={onStopMoving}
-            onTouchEnd={onStopMoving}
-            onTouchCancel={onStopMoving}
             className="range__bar__control m-max"
             style={
               moving.lastActiveControl === RangeControls.MAX
