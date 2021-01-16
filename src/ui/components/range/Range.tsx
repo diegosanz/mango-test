@@ -110,12 +110,7 @@ const Range: FC<RangeProps> = ({ values }) => {
     }
   }, [values]);
 
-  const onStartMoving = (
-    ev:
-      | React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
-      | React.TouchEvent<HTMLDivElement>,
-    el: RangeControls
-  ) => {
+  const onStartMoving = (el: RangeControls) => {
     setMoving({
       lastActiveControl: el,
       released: false,
@@ -168,11 +163,11 @@ const Range: FC<RangeProps> = ({ values }) => {
         />
         <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
-            onMouseDown={(ev) => {
-              onStartMoving(ev, RangeControls.MIN);
+            onMouseDown={() => {
+              onStartMoving(RangeControls.MIN);
             }}
-            onTouchStart={(ev) => {
-              onStartMoving(ev, RangeControls.MIN);
+            onTouchStart={() => {
+              onStartMoving(RangeControls.MIN);
             }}
             onMouseMove={(ev) => {
               onMoving(ev, RangeControls.MIN);
@@ -193,11 +188,11 @@ const Range: FC<RangeProps> = ({ values }) => {
           />
 
           <RangeControl
-            onMouseDown={(ev) => {
-              onStartMoving(ev, RangeControls.MAX);
+            onMouseDown={() => {
+              onStartMoving(RangeControls.MAX);
             }}
-            onTouchStart={(ev) => {
-              onStartMoving(ev, RangeControls.MAX);
+            onTouchStart={() => {
+              onStartMoving(RangeControls.MAX);
             }}
             onMouseMove={(ev) => {
               onMoving(ev, RangeControls.MAX);
