@@ -210,6 +210,8 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
     setRangeState({
       ...rangeState,
       released: true,
+      minPos: minValue.percent,
+      maxPos: maxValue.percent,
     });
 
     setVal({

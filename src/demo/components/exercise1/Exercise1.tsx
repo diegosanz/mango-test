@@ -1,9 +1,14 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Range from "../../../ui/components/range/Range";
 
 const Exercise1: FC = () => {
+  const [rangeSelected, setRangeSelected] = useState<{
+    min: number;
+    max: number;
+  }>();
+
   const onChangeHandler = (ev: { min: number; max: number }) => {
-    console.log("handler", ev);
+    setRangeSelected(ev);
   };
 
   return (
@@ -11,8 +16,8 @@ const Exercise1: FC = () => {
       <h1>Exercise 1</h1>
       <Range
         options={{ min: 1, max: 100 }}
+        value={rangeSelected}
         onChange={onChangeHandler}
-        value={{ min: 60, max: 50 }}
         unit="€"
       />
     </div>
