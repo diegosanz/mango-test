@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { hot } from "react-hot-loader";
+import { store } from "./store/store";
+import { Provider } from "react-redux";
+import NotFound from "./ui/components/not-found/NotFound";
+import Exercise2 from "./demo/components/exercise2/Example2";
+import Exercise1 from "./demo/components/exercise1/Exercise1";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <Redirect
+              to={{
+                pathname: "/exercise1",
+              }}
+            />
+          </Route>
+
+          <Route exact path="/exercise1" component={Exercise1} />
+          <Route exact path="/exercise2" component={Exercise2} />
+
+          <Route path="*" component={NotFound} />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
-export default App;
+export default process.env.NODE_ENV === "development" ? hot(module)(App) : App;
