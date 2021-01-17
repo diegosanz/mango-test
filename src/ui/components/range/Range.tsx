@@ -228,7 +228,11 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
   return (
     <RangeStyles>
       <div className="range">
-        <InvisibleInput value={val.min} onChange={(ev) => console.log(ev)} />
+        <InvisibleInput
+          value={val.min}
+          onChange={(ev) => console.log(ev)}
+          size={rangeState.limitMax.toString().length}
+        />
         <div
           className="range__bar"
           ref={rangeBarRef}
@@ -274,7 +278,11 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
 
           <div className="range__bar__rail"></div>
         </div>
-        <InvisibleInput value={val.max} onChange={(ev) => console.log(ev)} />
+        <InvisibleInput
+          value={val.max}
+          onChange={(ev) => console.log(ev)}
+          size={rangeState.limitMax.toString().length}
+        />
       </div>
     </RangeStyles>
   );
