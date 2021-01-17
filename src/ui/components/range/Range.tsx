@@ -198,31 +198,33 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
   };
 
   const onStopMoving = () => {
-    const minValue = closestRangeValueByPercentage(
-      rangeState.minPos,
-      rangeState.options
-    );
-    const maxValue = closestRangeValueByPercentage(
-      rangeState.maxPos,
-      rangeState.options
-    );
+    if (!rangeState.released) {
+      const minValue = closestRangeValueByPercentage(
+        rangeState.minPos,
+        rangeState.options
+      );
+      const maxValue = closestRangeValueByPercentage(
+        rangeState.maxPos,
+        rangeState.options
+      );
 
-    setRangeState({
-      ...rangeState,
-      released: true,
-      minPos: minValue.percent,
-      maxPos: maxValue.percent,
-    });
+      setRangeState({
+        ...rangeState,
+        released: true,
+        minPos: minValue.percent,
+        maxPos: maxValue.percent,
+      });
 
-    setVal({
-      min: minValue.value,
-      max: maxValue.value,
-    });
+      setVal({
+        min: minValue.value,
+        max: maxValue.value,
+      });
 
-    emitValue({
-      min: minValue.value,
-      max: maxValue.value,
-    });
+      emitValue({
+        min: minValue.value,
+        max: maxValue.value,
+      });
+    }
   };
 
   const emitValue = (val: { min: number; max: number }) => {
