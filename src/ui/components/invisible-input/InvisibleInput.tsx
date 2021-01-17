@@ -1,4 +1,4 @@
-import React, { FC, FocusEvent } from "react";
+import React, { FC, FocusEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const InvisibleInputContainer = styled.div`
@@ -24,6 +24,11 @@ const InvisibleInputContainer = styled.div`
     &:disabled {
       color: inherit;
     }
+
+    &:focus {
+      border: none;
+      outline: none;
+    }
   }
 `;
 
@@ -31,7 +36,6 @@ interface InvisibleInputProps {
   value: number;
   unit?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (event: FocusEvent<HTMLSpanElement>) => void;
   disabled?: boolean;
 }
 
@@ -39,19 +43,38 @@ const InvisibleInput: FC<InvisibleInputProps> = ({
   value,
   unit,
   onChange,
-  onBlur,
   disabled,
 }) => {
+  const [internalValue, setInternalValue] = useState(value.toString());
+
+  useEffect(() => {
+    setInternalValue(value.toString());
+  }, [value]);
+
+  const handleOnChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setInternalValue(ev.target.value);
+
+    if (!isNaN(ev.target.valueAsNumber)) {
+      if (onChange) {
+        onChange(ev);
+      }
+    }
+  };
+
+  const handleOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
+    setInternalValue(value.toString());
+  };
+
   return (
     <InvisibleInputContainer>
       <input
         className="span-input"
         type="number"
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        value={internalValue}
+        onChange={(ev) => handleOnChange(ev)}
+        onBlur={(ev) => handleOnBlur(ev)}
         style={{
-          width: `${value.toString().length}ch`,
+          width: `${internalValue.toString().length}ch`,
         }}
         disabled={disabled}
       ></input>
