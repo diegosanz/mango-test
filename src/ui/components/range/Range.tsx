@@ -97,7 +97,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
         inputEditable: false,
         options: generatePercentages(options),
       };
-    } else if (!isNaN(options.max) && !isNaN(options.min)) {
+    } else if (!isNaN(options?.max) && !isNaN(options?.min)) {
       // Validate that in fact `min` is minor than `max`
       const min = Math.min(options.min, options.max);
       const max = Math.max(options.min, options.max);
