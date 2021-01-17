@@ -9,6 +9,8 @@ const InvisibleInputContainer = styled.div`
     font-size: inherit;
     padding: 0;
     width: 100%;
+    min-width: 1.5ch;
+    transition: width 0.5s;
 
     & {
       -moz-appearance: textfield;
@@ -40,7 +42,6 @@ const InvisibleInput: FC<InvisibleInputProps> = ({
   onBlur,
   disabled,
 }) => {
-  const emptyWidth = 3;
   return (
     <InvisibleInputContainer>
       <input
@@ -50,7 +51,7 @@ const InvisibleInput: FC<InvisibleInputProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         style={{
-          width: `${value.toString().length || emptyWidth}ch`,
+          width: `${value.toString().length}ch`,
         }}
         disabled={disabled}
       ></input>
