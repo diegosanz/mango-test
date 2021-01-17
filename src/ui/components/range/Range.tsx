@@ -52,7 +52,8 @@ interface RangeProps {
 interface RangeState {
   /** Tells if user can edit max and min inputs */
   inputEditable: boolean;
-  limits: { min: number; max: number };
+  limitMin: number;
+  limitMax: number;
   options: RangeValue[];
   lastActiveControl: RangeControls;
   released: boolean;
@@ -60,17 +61,22 @@ interface RangeState {
   maxPos: number;
 }
 
+const rangeStateDefault: RangeState = {
+  inputEditable: false,
+  limitMin: 0,
+  limitMax: 0,
+  options: [],
+  lastActiveControl: RangeControls.MIN,
+  released: true,
+  minPos: 0,
+  maxPos: 100,
+};
+
 const Range: FC<RangeProps> = ({ options, value, onChange }) => {
   const rangeBarRef = useRef<HTMLDivElement>(null);
 
   const [rangeState, setRangeState] = useState<RangeState>({
-    inputEditable: false,
-    limits: { min: 0, max: 0 },
-    options: [],
-    lastActiveControl: RangeControls.MIN,
-    released: true,
-    minPos: 0,
-    maxPos: 100,
+    ...rangeStateDefault,
   });
 
   const [val, setVal] = useState<{ min: number; max: number }>({
@@ -79,15 +85,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
   });
 
   useEffect(() => {
-    let rangeStateTemp: RangeState = {
-      inputEditable: false,
-      limits: { min: 0, max: 0 },
-      options: [],
-      lastActiveControl: RangeControls.MIN,
-      released: true,
-      minPos: 0,
-      maxPos: 100,
-    };
+    let rangeStateTemp: RangeState = { ...rangeStateDefault };
 
     if (Array.isArray(options)) {
       rangeStateTemp = {
@@ -110,8 +108,11 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
       };
     }
 
-    const min = value?.min || rangeState.limits.min;
-    const max = value?.max || rangeState.limits.max;
+    const limitMin = rangeStateTemp.options[0].value;
+    const limitMax =
+      rangeStateTemp.options[rangeStateTemp.options.length - 1].value;
+    const min = value?.min ?? limitMin;
+    const max = value?.max ?? limitMax;
 
     setVal({
       min,
@@ -120,10 +121,8 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
 
     setRangeState({
       ...rangeStateTemp,
-      limits: {
-        min: rangeStateTemp.options[0].value,
-        max: rangeStateTemp.options[rangeStateTemp.options.length - 1].value,
-      },
+      limitMin,
+      limitMax,
       maxPos: closestRangeValueByValue(max, rangeStateTemp.options).percent,
       minPos: closestRangeValueByValue(min, rangeStateTemp.options).percent,
     });
@@ -220,38 +219,9 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
     });
   };
 
-  const updateValue = () => {
-    const minValue = closestRangeValueByPercentage(
-      rangeState.minPos,
-      rangeState.options
-    );
-    const maxValue = closestRangeValueByPercentage(
-      rangeState.maxPos,
-      rangeState.options
-    );
-
-    setRangeState({
-      ...rangeState,
-      released: true,
-    });
-
-    setVal({
-      min: minValue.value,
-      max: maxValue.value,
-    });
-
-    emitValue({
-      min: minValue.value,
-      max: maxValue.value,
-    });
-  };
-
-  const emitValue = (val: { min?: number; max?: number }) => {
+  const emitValue = (val: { min: number; max: number }) => {
     if (onChange) {
-      onChange({
-        min: val.min === undefined ? rangeState.limits.min : val.min,
-        max: val.max === undefined ? rangeState.limits.max : val.max,
-      });
+      onChange(val);
     }
   };
 
