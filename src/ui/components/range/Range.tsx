@@ -312,6 +312,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
           value={val.min}
           onChange={handleTextInputMin}
           unit={unit}
+          disabled={!rangeState.inputEditable}
         />
         <div
           className="range__bar"
@@ -360,6 +361,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
           value={val.max}
           onChange={handleTextInputMax}
           unit={unit}
+          disabled={!rangeState.inputEditable}
         />
       </div>
     </RangeStyles>
