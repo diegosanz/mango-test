@@ -9,7 +9,12 @@ const Exercise1: FC = () => {
   return (
     <div className="exercise1">
       <h1>Exercise 1</h1>
-      <Range options={{ min: 1, max: 100 }} onChange={onChangeHandler} />
+      <Range
+        options={{ min: 1, max: 100 }}
+        onChange={onChangeHandler}
+        value={{ min: 60, max: 50 }}
+        unit="€"
+      />
     </div>
   );
 };

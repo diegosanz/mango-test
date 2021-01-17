@@ -29,6 +29,7 @@ const RangeStyles = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: center;
+      margin: 0 1em;
 
       &__control {
         position: absolute;
@@ -47,6 +48,7 @@ interface RangeProps {
   options: number[] | { min: number; max: number };
   value?: { min: number; max: number };
   onChange?: (e: { min: number; max: number }) => void;
+  unit?: string;
 }
 
 interface RangeState {
@@ -62,7 +64,7 @@ interface RangeState {
 }
 
 const rangeStateDefault: RangeState = {
-  inputEditable: false,
+  inputEditable: true,
   limitMin: 0,
   limitMax: 0,
   options: [],
@@ -72,7 +74,7 @@ const rangeStateDefault: RangeState = {
   maxPos: 100,
 };
 
-const Range: FC<RangeProps> = ({ options, value, onChange }) => {
+const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
   const rangeBarRef = useRef<HTMLDivElement>(null);
 
   const [rangeState, setRangeState] = useState<RangeState>({
@@ -90,6 +92,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
     if (Array.isArray(options)) {
       rangeStateTemp = {
         ...rangeStateTemp,
+        inputEditable: false,
         options: generatePercentages(options),
       };
     } else if (!isNaN(options.max) && !isNaN(options.min)) {
@@ -104,6 +107,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
 
       rangeStateTemp = {
         ...rangeStateTemp,
+        inputEditable: true,
         options: generatePercentages(steps),
       };
     }
@@ -225,13 +229,30 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
     }
   };
 
+  const handleTextInputMin = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setVal({
+      ...val,
+      min: ev.target.valueAsNumber,
+    });
+  };
+
+  const handleTextInputMax = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setVal({
+      ...val,
+      max: ev.target.valueAsNumber,
+    });
+  };
+
   return (
     <RangeStyles>
       <div className="range">
         <InvisibleInput
           value={val.min}
-          onChange={(ev) => console.log(ev)}
-          size={rangeState.limitMax.toString().length}
+          onBlur={(ev) => {
+            console.log("invisible input blur", ev);
+          }}
+          onChange={handleTextInputMin}
+          unit={unit}
         />
         <div
           className="range__bar"
@@ -278,10 +299,14 @@ const Range: FC<RangeProps> = ({ options, value, onChange }) => {
 
           <div className="range__bar__rail"></div>
         </div>
+
         <InvisibleInput
           value={val.max}
-          onChange={(ev) => console.log(ev)}
-          size={rangeState.limitMax.toString().length}
+          onBlur={(ev) => {
+            console.log("invisible input blur", ev);
+          }}
+          onChange={handleTextInputMax}
+          unit={unit}
         />
       </div>
     </RangeStyles>
