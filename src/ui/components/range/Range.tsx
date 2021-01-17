@@ -8,6 +8,7 @@ import {
   closestRangeValueByPercentage,
   closestRangeValueByValue,
 } from "../../../misc/utils/closestRangeValue";
+import useEvent from "../../hooks/useEvent";
 
 enum RangeControls {
   MIN,
@@ -18,6 +19,7 @@ const RangeStyles = styled.div`
   .range {
     display: flex;
     user-select: none;
+    padding: 1em 0;
 
     &__boundaries {
       max-width: 100%;
@@ -237,6 +239,8 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
     }
   };
 
+  useEvent("mouseup", onStopMoving);
+
   const emitValue = (val: { min: number; max: number }) => {
     if (onChange) {
       onChange(val);
@@ -318,7 +322,6 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
           onTouchMove={(ev) => {
             onMoving(ev);
           }}
-          onMouseUp={onStopMoving}
           onTouchEnd={onStopMoving}
           onTouchCancel={onStopMoving}
         >
