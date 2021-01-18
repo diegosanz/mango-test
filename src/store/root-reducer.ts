@@ -1,0 +1,12 @@
+import { combineReducers } from "@reduxjs/toolkit";
+import exercise1 from "../demo/store/exercise1/exercise1.slice";
+import exercise2 from "../demo/store/exercise2/exercise2.slice";
+
+const rootReducer = combineReducers({
+  exercise1,
+  exercise2,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
+
+export default rootReducer;
