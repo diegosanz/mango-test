@@ -1,5 +1,6 @@
 import Axios, { AxiosInstance } from "axios";
 import { MinMax } from "../../misc/models/MinMax";
+import { Exercise2Values } from "../models/Exercise2Response";
 
 class MockableService {
   api: AxiosInstance;
@@ -15,7 +16,7 @@ class MockableService {
   }
 
   getExercise2Options() {
-    return this.api.get<number[]>("/values");
+    return this.api.get<Exercise2Values>("/values");
   }
 }
 
