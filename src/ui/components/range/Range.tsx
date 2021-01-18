@@ -25,6 +25,7 @@ const RangeStyles = styled.div`
     &.m-disabled {
       position: relative;
       opacity: 0.6;
+      pointer-events: none;
 
       &::before {
         content: "";
