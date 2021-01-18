@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MinMax } from "../../../misc/models/MinMax";
+import MsgBox from "../../../ui/components/msg-box/MsgBox";
 import Range from "../../../ui/components/range/Range";
 import { getExercise2State } from "../../store/exercise2/exercise2.selectors";
 import { loadExercise2Options } from "../../store/exercise2/exercise2.slice";
@@ -26,6 +27,10 @@ const Exercise2: FC = () => {
   return (
     <div className="exercise2">
       <h1>Exercise 2</h1>
+      <MsgBox type="error">{exercise2State.error}</MsgBox>
+      <MsgBox type="info">
+        {exercise2State.isLoading ? "Loading..." : null}
+      </MsgBox>
       <Range
         options={exercise2State.options}
         value={rangeSelected}
