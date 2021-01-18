@@ -25,7 +25,6 @@ const RangeStyles = styled.div`
     &.m-disabled {
       position: relative;
       opacity: 0.6;
-      pointer-events: none;
 
       &::before {
         content: "";
@@ -36,6 +35,10 @@ const RangeStyles = styled.div`
         right: 0;
         bottom: 0;
         left: 0;
+      }
+
+      & > * {
+        pointer-events: none;
       }
     }
 
@@ -350,25 +353,24 @@ const Range: FC<RangeProps> = ({
 
   return (
     <RangeStyles>
-      <div className={`range ${rangeState.disabled ? "m-disabled" : null}`}>
+      <div
+        className={`range ${rangeState.disabled ? "m-disabled" : null}`}
+        onMouseMove={(ev) => {
+          onMoving(ev);
+        }}
+        onTouchMove={(ev) => {
+          onMoving(ev);
+        }}
+        onTouchEnd={onStopMoving}
+        onTouchCancel={onStopMoving}
+      >
         <InvisibleInput
           value={val.min}
           onChange={handleTextInputMin}
           unit={unit}
           disabled={!rangeState.inputEditable}
         />
-        <div
-          className="range__bar"
-          ref={rangeBarRef}
-          onMouseMove={(ev) => {
-            onMoving(ev);
-          }}
-          onTouchMove={(ev) => {
-            onMoving(ev);
-          }}
-          onTouchEnd={onStopMoving}
-          onTouchCancel={onStopMoving}
-        >
+        <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
             onMouseDown={() => {
               onStartMoving(RangeControls.MIN);
