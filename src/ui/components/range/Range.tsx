@@ -175,7 +175,7 @@ const Range: FC<RangeProps> = ({
       maxPos: closestRangeValueByValue(max, rangeStateTemp.options).percent,
       minPos: closestRangeValueByValue(min, rangeStateTemp.options).percent,
     });
-  }, [options, value]);
+  }, [options, value, disabled]);
 
   const onStartMoving = (el: RangeControls) => {
     setRangeState({

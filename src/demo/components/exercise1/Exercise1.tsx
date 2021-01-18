@@ -20,7 +20,7 @@ const Exercise1: FC = () => {
 
   useEffect(() => {
     dispatch(loadExercise1Options());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="exercise1">
