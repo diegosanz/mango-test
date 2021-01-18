@@ -5,7 +5,7 @@ import { hot } from "react-hot-loader";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 import NotFound from "./ui/components/not-found/NotFound";
-import Exercise2 from "./demo/components/exercise2/Example2";
+import Exercise2 from "./demo/components/exercise2/Exercise2";
 import Exercise1 from "./demo/components/exercise1/Exercise1";
 
 function App() {
