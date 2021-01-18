@@ -307,25 +307,24 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
 
   return (
     <RangeStyles>
-      <div className="range">
+      <div
+        className="range"
+        onMouseMove={(ev) => {
+          onMoving(ev);
+        }}
+        onTouchMove={(ev) => {
+          onMoving(ev);
+        }}
+        onTouchEnd={onStopMoving}
+        onTouchCancel={onStopMoving}
+      >
         <InvisibleInput
           value={val.min}
           onChange={handleTextInputMin}
           unit={unit}
           disabled={!rangeState.inputEditable}
         />
-        <div
-          className="range__bar"
-          ref={rangeBarRef}
-          onMouseMove={(ev) => {
-            onMoving(ev);
-          }}
-          onTouchMove={(ev) => {
-            onMoving(ev);
-          }}
-          onTouchEnd={onStopMoving}
-          onTouchCancel={onStopMoving}
-        >
+        <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
             onMouseDown={() => {
               onStartMoving(RangeControls.MIN);
