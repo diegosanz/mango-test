@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const RangeControl = styled.div`
-  cursor: grabbing;
+  cursor: grab;
   width: 1.25em;
   height: 1.25em;
   border-radius: 100%;
@@ -13,6 +13,10 @@ const RangeControl = styled.div`
   &:hover {
     width: 2.25em;
     height: 2.25em;
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 `;
 

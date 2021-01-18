@@ -9,6 +9,7 @@ import {
   closestRangeValueByValue,
 } from "../../../misc/utils/closestRangeValue";
 import useEvent from "../../hooks/useEvent";
+import { MinMax } from "../../../misc/models/MinMax";
 
 enum RangeControls {
   MIN,
@@ -20,6 +21,23 @@ const RangeStyles = styled.div`
     display: flex;
     user-select: none;
     padding: 1em 0;
+
+    &.m-disabled {
+      position: relative;
+      opacity: 0.6;
+      pointer-events: none;
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: 2;
+        cursor: not-allowed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+    }
 
     &__boundaries {
       max-width: 100%;
@@ -47,10 +65,11 @@ const RangeStyles = styled.div`
 `;
 
 interface RangeProps {
-  options: number[] | { min: number; max: number };
-  value?: { min: number; max: number };
-  onChange?: (e: { min: number; max: number }) => void;
+  options?: number[] | MinMax;
+  value?: MinMax;
+  onChange?: (e: MinMax) => void;
   unit?: string;
+  disabled?: boolean;
 }
 
 interface RangeState {
@@ -62,6 +81,7 @@ interface RangeState {
   released: boolean;
   minPos: number;
   maxPos: number;
+  disabled: boolean;
 }
 
 const rangeStateDefault: RangeState = {
@@ -72,9 +92,16 @@ const rangeStateDefault: RangeState = {
   released: true,
   minPos: 0,
   maxPos: 100,
+  disabled: false,
 };
 
-const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
+const Range: FC<RangeProps> = ({
+  options,
+  value,
+  onChange,
+  unit,
+  disabled,
+}) => {
   const rangeBarRef = useRef<HTMLDivElement>(null);
 
   const [rangeState, setRangeState] = useState<RangeState>({
@@ -83,7 +110,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
 
   const [lastActiveControl, setLastActiveControl] = useState<RangeControls>();
 
-  const [val, setVal] = useState<{ min: number; max: number }>({
+  const [val, setVal] = useState<MinMax>({
     min: 0,
     max: 0,
   });
@@ -91,13 +118,25 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
   useEffect(() => {
     let rangeStateTemp: RangeState = { ...rangeStateDefault };
 
+    if (!options || disabled) {
+      setRangeState({
+        ...rangeStateTemp,
+        disabled: true,
+        inputEditable: false,
+      });
+    }
+
+    if (!options) {
+      return;
+    }
+
     if (Array.isArray(options)) {
       rangeStateTemp = {
         ...rangeStateTemp,
         inputEditable: false,
         options: generatePercentages(options),
       };
-    } else if (!isNaN(options?.max) && !isNaN(options?.min)) {
+    } else if (options && !isNaN(options?.max) && !isNaN(options?.min)) {
       // Validate that in fact `min` is minor than `max`
       const min = Math.min(options.min, options.max);
       const max = Math.max(options.min, options.max);
@@ -112,11 +151,15 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
         inputEditable: true,
         options: generatePercentages(steps),
       };
+    } else {
+      rangeStateTemp = {
+        ...rangeStateTemp,
+      };
     }
 
-    const limitMin = rangeStateTemp.options[0].value;
+    const limitMin = rangeStateTemp.options[0]?.value;
     const limitMax =
-      rangeStateTemp.options[rangeStateTemp.options.length - 1].value;
+      rangeStateTemp.options[rangeStateTemp.options.length - 1]?.value;
     const min = value?.min ?? limitMin;
     const max = value?.max ?? limitMax;
 
@@ -132,7 +175,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
       maxPos: closestRangeValueByValue(max, rangeStateTemp.options).percent,
       minPos: closestRangeValueByValue(min, rangeStateTemp.options).percent,
     });
-  }, [options, value]);
+  }, [options, value, disabled]);
 
   const onStartMoving = (el: RangeControls) => {
     setRangeState({
@@ -241,7 +284,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
 
   useEvent("mouseup", onStopMoving);
 
-  const emitValue = (val: { min: number; max: number }) => {
+  const emitValue = (val: MinMax) => {
     if (onChange) {
       onChange(val);
     }
@@ -308,7 +351,7 @@ const Range: FC<RangeProps> = ({ options, value, onChange, unit }) => {
   return (
     <RangeStyles>
       <div
-        className="range"
+        className={`range ${rangeState.disabled ? "m-disabled" : null}`}
         onMouseMove={(ev) => {
           onMoving(ev);
         }}
