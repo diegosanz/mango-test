@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { MinMax } from "../../../misc/models/MinMax";
 import Range from "../../../ui/components/range/Range";
 
 const Exercise2: FC = () => {
@@ -7,7 +8,7 @@ const Exercise2: FC = () => {
     max: number;
   }>();
 
-  const onChangeHandler = (ev: { min: number; max: number }) => {
+  const onChangeHandler = (ev: MinMax) => {
     setRangeSelected(ev);
   };
 
