@@ -37,6 +37,12 @@ const Exercise2: FC = () => {
         onChange={onChangeHandler}
         unit="€"
       />
+
+      {rangeSelected !== undefined && (
+        <p>
+          Selected values: {rangeSelected?.min} - {rangeSelected?.max}
+        </p>
+      )}
     </div>
   );
 };
