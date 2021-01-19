@@ -1,16 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`snapshot MinMax range match 1`] = `
+exports[`Range snapshots snapshot MinMax range match 1`] = `
 <div
-  className="sc-dlfnbm bdQNGe"
+  className="sc-dlfnbm cVcDVU"
 >
   <div
     className="range null"
+    onMouseMove={[Function]}
+    onTouchCancel={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
   >
     <div
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input min"
         className="span-input"
         disabled={false}
         onBlur={[Function]}
@@ -27,13 +32,9 @@ exports[`snapshot MinMax range match 1`] = `
     </div>
     <div
       className="range__bar"
-      onMouseMove={[Function]}
-      onTouchCancel={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
     >
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-min"
+        className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -44,7 +45,7 @@ exports[`snapshot MinMax range match 1`] = `
         }
       />
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-max"
+        className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -62,6 +63,7 @@ exports[`snapshot MinMax range match 1`] = `
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input max"
         className="span-input"
         disabled={false}
         onBlur={[Function]}
@@ -80,17 +82,22 @@ exports[`snapshot MinMax range match 1`] = `
 </div>
 `;
 
-exports[`snapshot Number[] range match 1`] = `
+exports[`Range snapshots snapshot Number[] range match 1`] = `
 <div
-  className="sc-dlfnbm bdQNGe"
+  className="sc-dlfnbm cVcDVU"
 >
   <div
     className="range null"
+    onMouseMove={[Function]}
+    onTouchCancel={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
   >
     <div
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input min"
         className="span-input"
         disabled={true}
         onBlur={[Function]}
@@ -107,13 +114,9 @@ exports[`snapshot Number[] range match 1`] = `
     </div>
     <div
       className="range__bar"
-      onMouseMove={[Function]}
-      onTouchCancel={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
     >
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-min"
+        className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -124,7 +127,7 @@ exports[`snapshot Number[] range match 1`] = `
         }
       />
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-max"
+        className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -142,6 +145,7 @@ exports[`snapshot Number[] range match 1`] = `
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input max"
         className="span-input"
         disabled={true}
         onBlur={[Function]}
@@ -160,17 +164,22 @@ exports[`snapshot Number[] range match 1`] = `
 </div>
 `;
 
-exports[`snapshot disabled range match 1`] = `
+exports[`Range snapshots snapshot disabled range match 1`] = `
 <div
-  className="sc-dlfnbm bdQNGe"
+  className="sc-dlfnbm cVcDVU"
 >
   <div
     className="range m-disabled"
+    onMouseMove={[Function]}
+    onTouchCancel={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
   >
     <div
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input min"
         className="span-input"
         disabled={true}
         onBlur={[Function]}
@@ -187,13 +196,9 @@ exports[`snapshot disabled range match 1`] = `
     </div>
     <div
       className="range__bar"
-      onMouseMove={[Function]}
-      onTouchCancel={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
     >
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-min"
+        className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -204,7 +209,7 @@ exports[`snapshot disabled range match 1`] = `
         }
       />
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-max"
+        className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -222,6 +227,7 @@ exports[`snapshot disabled range match 1`] = `
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input max"
         className="span-input"
         disabled={true}
         onBlur={[Function]}
@@ -240,17 +246,22 @@ exports[`snapshot disabled range match 1`] = `
 </div>
 `;
 
-exports[`snapshot empty range match 1`] = `
+exports[`Range snapshots snapshot empty range match 1`] = `
 <div
-  className="sc-dlfnbm bdQNGe"
+  className="sc-dlfnbm cVcDVU"
 >
   <div
     className="range null"
+    onMouseMove={[Function]}
+    onTouchCancel={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
   >
     <div
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input min"
         className="span-input"
         disabled={false}
         onBlur={[Function]}
@@ -267,13 +278,9 @@ exports[`snapshot empty range match 1`] = `
     </div>
     <div
       className="range__bar"
-      onMouseMove={[Function]}
-      onTouchCancel={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
     >
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-min"
+        className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -284,7 +291,7 @@ exports[`snapshot empty range match 1`] = `
         }
       />
       <div
-        className="sc-gsTCUz vaZaG range__bar__control m-max"
+        className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
         style={
@@ -302,6 +309,7 @@ exports[`snapshot empty range match 1`] = `
       className="sc-bdfBwQ jldiZV"
     >
       <input
+        aria-label="range input max"
         className="span-input"
         disabled={false}
         onBlur={[Function]}
