@@ -33,7 +33,6 @@ exports[`Range snapshots snapshot MinMax range match 1`] = `
     </div>
     <div
       className="range__bar"
-      role="slider"
     >
       <div
         aria-label="range control min"
@@ -119,7 +118,6 @@ exports[`Range snapshots snapshot Number[] range match 1`] = `
     </div>
     <div
       className="range__bar"
-      role="slider"
     >
       <div
         aria-label="range control min"
@@ -205,7 +203,6 @@ exports[`Range snapshots snapshot disabled range match 1`] = `
     </div>
     <div
       className="range__bar"
-      role="slider"
     >
       <div
         aria-label="range control min"
@@ -291,7 +288,6 @@ exports[`Range snapshots snapshot empty range match 1`] = `
     </div>
     <div
       className="range__bar"
-      role="slider"
     >
       <div
         aria-label="range control min"

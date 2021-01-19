@@ -358,7 +358,7 @@ const Range: FC<RangeProps> = ({
           disabled={!rangeState.inputEditable}
           ariaLabel="range input min"
         />
-        <div className="range__bar" ref={rangeBarRef} role="slider">
+        <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
             aria-label="range control min"
             onMouseDown={() => {
