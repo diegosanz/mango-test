@@ -67,7 +67,7 @@ const RangeStyles = styled.div`
   }
 `;
 
-interface RangeProps {
+export interface RangeProps {
   options?: number[] | MinMax;
   value?: MinMax;
   onChange?: (e: MinMax) => void;
@@ -369,6 +369,7 @@ const Range: FC<RangeProps> = ({
           onChange={handleTextInputMin}
           unit={unit}
           disabled={!rangeState.inputEditable}
+          ariaLabel="range input min"
         />
         <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
@@ -407,6 +408,7 @@ const Range: FC<RangeProps> = ({
           onChange={handleTextInputMax}
           unit={unit}
           disabled={!rangeState.inputEditable}
+          ariaLabel="range input max"
         />
       </div>
     </RangeStyles>
