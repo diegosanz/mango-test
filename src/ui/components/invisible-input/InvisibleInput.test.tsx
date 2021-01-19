@@ -78,8 +78,8 @@ describe("InvisibleInput operations", () => {
     expect(input).toHaveValue(12);
   });
 
-  test("should not editted when disabled", () => {
-    const utils = render(
+  test("should be disabled", () => {
+    const { getByLabelText } = render(
       <InvisibleInput
         value={100}
         unit="€"
@@ -87,11 +87,8 @@ describe("InvisibleInput operations", () => {
         disabled={true}
       />
     );
-    const input = utils.getByLabelText("test input");
 
-    userEvent.type(input, "12");
-
-    expect(input).toHaveValue(100);
+    expect(getByLabelText("test input")).toBeDisabled();
   });
 });
 
