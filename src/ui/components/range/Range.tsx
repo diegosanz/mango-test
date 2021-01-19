@@ -53,6 +53,7 @@ const RangeStyles = styled.div`
       flex-direction: column;
       justify-content: center;
       margin: 0 1em;
+      min-width: 100px;
 
       &__control {
         position: absolute;
@@ -354,7 +355,7 @@ const Range: FC<RangeProps> = ({
   return (
     <RangeStyles>
       <div
-        className={`range ${rangeState.disabled ? "m-disabled" : null}`}
+        className={`range ${rangeState.disabled ? "m-disabled" : ""}`}
         onMouseMove={(ev) => {
           onMoving(ev);
         }}
@@ -363,6 +364,7 @@ const Range: FC<RangeProps> = ({
         }}
         onTouchEnd={onStopMoving}
         onTouchCancel={onStopMoving}
+        aria-label="range-selector"
       >
         <InvisibleInput
           value={val.min}
@@ -371,8 +373,9 @@ const Range: FC<RangeProps> = ({
           disabled={!rangeState.inputEditable}
           ariaLabel="range input min"
         />
-        <div className="range__bar" ref={rangeBarRef}>
+        <div className="range__bar" ref={rangeBarRef} role="slider">
           <RangeControl
+            aria-label="range control min"
             onMouseDown={() => {
               onStartMoving(RangeControls.MIN);
             }}
@@ -387,6 +390,7 @@ const Range: FC<RangeProps> = ({
           />
 
           <RangeControl
+            aria-label="range control max"
             onMouseDown={() => {
               onStartMoving(RangeControls.MAX);
             }}

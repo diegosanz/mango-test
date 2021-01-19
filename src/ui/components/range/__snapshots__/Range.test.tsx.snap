@@ -2,10 +2,11 @@
 
 exports[`Range snapshots snapshot MinMax range match 1`] = `
 <div
-  className="sc-dlfnbm cVcDVU"
+  className="sc-dlfnbm hztomj"
 >
   <div
-    className="range null"
+    aria-label="range-selector"
+    className="range "
     onMouseMove={[Function]}
     onTouchCancel={[Function]}
     onTouchEnd={[Function]}
@@ -32,8 +33,10 @@ exports[`Range snapshots snapshot MinMax range match 1`] = `
     </div>
     <div
       className="range__bar"
+      role="slider"
     >
       <div
+        aria-label="range control min"
         className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -45,6 +48,7 @@ exports[`Range snapshots snapshot MinMax range match 1`] = `
         }
       />
       <div
+        aria-label="range control max"
         className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -84,10 +88,11 @@ exports[`Range snapshots snapshot MinMax range match 1`] = `
 
 exports[`Range snapshots snapshot Number[] range match 1`] = `
 <div
-  className="sc-dlfnbm cVcDVU"
+  className="sc-dlfnbm hztomj"
 >
   <div
-    className="range null"
+    aria-label="range-selector"
+    className="range "
     onMouseMove={[Function]}
     onTouchCancel={[Function]}
     onTouchEnd={[Function]}
@@ -114,8 +119,10 @@ exports[`Range snapshots snapshot Number[] range match 1`] = `
     </div>
     <div
       className="range__bar"
+      role="slider"
     >
       <div
+        aria-label="range control min"
         className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -127,6 +134,7 @@ exports[`Range snapshots snapshot Number[] range match 1`] = `
         }
       />
       <div
+        aria-label="range control max"
         className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -166,9 +174,10 @@ exports[`Range snapshots snapshot Number[] range match 1`] = `
 
 exports[`Range snapshots snapshot disabled range match 1`] = `
 <div
-  className="sc-dlfnbm cVcDVU"
+  className="sc-dlfnbm hztomj"
 >
   <div
+    aria-label="range-selector"
     className="range m-disabled"
     onMouseMove={[Function]}
     onTouchCancel={[Function]}
@@ -196,8 +205,10 @@ exports[`Range snapshots snapshot disabled range match 1`] = `
     </div>
     <div
       className="range__bar"
+      role="slider"
     >
       <div
+        aria-label="range control min"
         className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -209,6 +220,7 @@ exports[`Range snapshots snapshot disabled range match 1`] = `
         }
       />
       <div
+        aria-label="range control max"
         className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -248,10 +260,11 @@ exports[`Range snapshots snapshot disabled range match 1`] = `
 
 exports[`Range snapshots snapshot empty range match 1`] = `
 <div
-  className="sc-dlfnbm cVcDVU"
+  className="sc-dlfnbm hztomj"
 >
   <div
-    className="range null"
+    aria-label="range-selector"
+    className="range "
     onMouseMove={[Function]}
     onTouchCancel={[Function]}
     onTouchEnd={[Function]}
@@ -278,8 +291,10 @@ exports[`Range snapshots snapshot empty range match 1`] = `
     </div>
     <div
       className="range__bar"
+      role="slider"
     >
       <div
+        aria-label="range control min"
         className="sc-gsTCUz iZEpnt range__bar__control m-min"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
@@ -291,6 +306,7 @@ exports[`Range snapshots snapshot empty range match 1`] = `
         }
       />
       <div
+        aria-label="range control max"
         className="sc-gsTCUz iZEpnt range__bar__control m-max"
         onMouseDown={[Function]}
         onTouchStart={[Function]}
