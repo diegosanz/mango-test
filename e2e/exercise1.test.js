@@ -1,61 +1,82 @@
-const puppeteer = require("puppeteer");
+const timeout = process.env.SLOWMO ? 30000 : 10000;
+
+beforeAll(async () => {
+  await page.goto(URL, { waitUntil: "domcontentloaded" });
+});
+
+describe("Page basics", () => {
+  test(
+    "Title matches",
+    async () => {
+      const title = await page.title();
+      expect(title).toBe("Diego Sanz");
+    },
+    timeout
+  );
+
+  test(
+    "Take screenshot of home page",
+    async () => {
+      await page.setViewport({ width: 1920, height: 1080 });
+      await page.screenshot({
+        path: "./e2e/screenshots/home.png",
+        fullPage: true,
+        type: "png",
+      });
+    },
+    timeout
+  );
+});
 
 describe("Range move controls", () => {
-  test("move min control increments value", async () => {
-    const browser = await puppeteer.launch({
-      headless: false,
-    });
-    const page = await browser.newPage();
+  test(
+    "move min control increments value",
+    async () => {
+      await page.setViewport({ width: 1920, height: 1080 });
+      await page.goto("http://localhost:8080/exercise1");
+      await page.waitForSelector(".range__bar__control.m-min");
 
-    page.emulate({
-      viewport: {
-        width: 500,
-        height: 200,
-      },
-      userAgent: "",
-    });
+      const inputMin = await page.$('[aria-label="range input min"]');
+      const inputMax = await page.$('[aria-label="range input max"]');
 
-    await page.goto("http://localhost:8080/exercise1");
-    await page.waitForSelector(".range__bar__control.m-min");
-    await page.waitForTimeout(3000);
-    const inputMin = await page.$('[aria-label="range input min"]');
-    const inputMax = await page.$('[aria-label="range input max"]');
+      const controlMin = await page.$('[aria-label="range control min"]');
+      const controlMax = await page.$('[aria-label="range control max"]');
 
-    const controlMin = await page.$('[aria-label="range control min"]');
-    const controlMax = await page.$('[aria-label="range control max"]');
+      const controlMinBox = await controlMin.boundingBox();
+      const controlMaxBox = await controlMax.boundingBox();
 
-    const controlMinBox = await controlMin.boundingBox();
-    const controlMaxBox = await controlMax.boundingBox();
+      if (controlMaxBox) {
+        const height = controlMaxBox.y + controlMaxBox.height / 2;
+        await page.mouse.move(
+          controlMaxBox.x + controlMaxBox.width / 2,
+          height
+        );
+        await page.mouse.down();
+        await page.mouse.move(controlMaxBox.x - 600, height);
+        await page.mouse.up();
+      }
 
-    if (controlMaxBox) {
-      const height = controlMaxBox.y + controlMaxBox.height / 2;
-      await page.mouse.move(controlMaxBox.x + controlMaxBox.width / 2, height);
-      await page.mouse.down();
-      await page.mouse.move(controlMaxBox.x - 600, height);
-      await page.mouse.up();
-    }
+      await inputMax.focus();
+      await inputMax.click({ clickCount: 3 });
+      await page.keyboard.type("33");
 
-    await inputMax.focus();
-    await inputMax.click({ clickCount: 3 });
-    await page.keyboard.type("33");
+      if (controlMinBox) {
+        await page.mouse.move(
+          controlMinBox.x + controlMinBox.width / 2,
+          controlMinBox.y + controlMinBox.height / 2
+        );
+        await page.mouse.down();
+        await page.mouse.move(
+          controlMinBox.x + 300,
+          controlMinBox.y + controlMinBox.height / 2
+        );
+        await page.mouse.up();
+      }
 
-    if (controlMinBox) {
-      await page.mouse.move(
-        controlMinBox.x + controlMinBox.width / 2,
-        controlMinBox.y + controlMinBox.height / 2
-      );
-      await page.mouse.down();
-      await page.mouse.move(
-        controlMinBox.x + 300,
-        controlMinBox.y + controlMinBox.height / 2
-      );
-      await page.mouse.up();
-    }
+      const maxValue = await page.evaluate((x) => x.value, inputMax);
 
-    const maxValue = await page.evaluate((x) => x.value, inputMax);
-
-    expect(await page.evaluate((e) => e.value, inputMin)).toBe(maxValue);
-
-    browser.close();
-  }, 16000);
+      expect(await page.evaluate((e) => e.value, inputMin)).toBe(maxValue);
+    },
+    timeout
+  );
 });
