@@ -355,7 +355,7 @@ const Range: FC<RangeProps> = ({
           value={rangeState.minVal}
           onChange={handleTextInputMin}
           unit={unit}
-          disabled={!rangeState.inputEditable}
+          disabled={!rangeState.inputEditable || disabled}
           ariaLabel="range input min"
         />
         <div className="range__bar" ref={rangeBarRef}>
@@ -398,7 +398,7 @@ const Range: FC<RangeProps> = ({
           value={rangeState.maxVal}
           onChange={handleTextInputMax}
           unit={unit}
-          disabled={!rangeState.inputEditable}
+          disabled={!rangeState.inputEditable || disabled}
           ariaLabel="range input max"
         />
       </div>

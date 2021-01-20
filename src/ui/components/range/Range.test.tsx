@@ -181,7 +181,7 @@ describe("Range controls", () => {
 });
 
 describe("Range disabled", () => {
-  test.skip("should Range be disabled with disabled=true prop", () => {
+  test("should Range be disabled with disabled=true prop", () => {
     const { getByLabelText, minInput, maxInput } = setup({
       options: { min: 1, max: 10 },
       disabled: true,

@@ -18,7 +18,6 @@ exports[`Range snapshots snapshot MinMax range match 1`] = `
       <input
         aria-label="range input min"
         className="span-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         style={
@@ -68,7 +67,6 @@ exports[`Range snapshots snapshot MinMax range match 1`] = `
       <input
         aria-label="range input max"
         className="span-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         style={
@@ -273,7 +271,6 @@ exports[`Range snapshots snapshot empty range match 1`] = `
       <input
         aria-label="range input min"
         className="span-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         style={
@@ -323,7 +320,6 @@ exports[`Range snapshots snapshot empty range match 1`] = `
       <input
         aria-label="range input max"
         className="span-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         style={
