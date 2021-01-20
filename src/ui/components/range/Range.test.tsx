@@ -139,8 +139,10 @@ describe("Range controls", () => {
     expect(minInput).toHaveValue(20);
   });
 
-  test("should change min value when moves max control", () => {
-    const { maxControl, maxInput } = setup({ options: { min: 20, max: 40 } });
+  test("should change max value when moves max control", () => {
+    const { maxControl, maxInput } = setup({
+      options: { min: 20, max: 40 },
+    });
 
     expect(maxInput).toHaveValue(40);
 
@@ -192,8 +194,11 @@ describe("Range disabled", () => {
     expect(maxInput).toBeDisabled();
   });
 
-  // test("should has class disabled with no options", () => {});
-  // test("should not react to user events when disabled", () => {});
-});
+  test("should has class disabled with no options", () => {
+    const { getByLabelText, minInput, maxInput } = setup();
 
-describe("Range user interaction", () => {});
+    expect(getByLabelText("range-selector")).toHaveClass("m-disabled");
+    expect(minInput).toBeDisabled();
+    expect(maxInput).toBeDisabled();
+  });
+});
