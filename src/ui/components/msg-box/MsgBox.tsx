@@ -21,7 +21,7 @@ enum MsgBoxType {
   info = "m-info",
 }
 
-interface MsgBoxProps {
+export interface MsgBoxProps {
   type: keyof typeof MsgBoxType;
 }
 

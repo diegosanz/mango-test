@@ -26,16 +26,23 @@ const Exercise1: FC = () => {
   return (
     <div className="exercise1">
       <h1>Exercise 1</h1>
-      <MsgBox type="error">{exercise1State.error}</MsgBox>
-      <MsgBox type="info">
-        {exercise1State.isLoading ? "Loading..." : null}
-      </MsgBox>
       <Range
         options={exercise1State.options}
         value={rangeSelected}
         onChange={onChangeHandler}
         unit="€"
       />
+
+      <MsgBox type="error">{exercise1State.error}</MsgBox>
+      <MsgBox type="info">
+        {exercise1State.isLoading ? "Loading..." : null}
+      </MsgBox>
+
+      {rangeSelected !== undefined && (
+        <p>
+          Selected values: {rangeSelected?.min} - {rangeSelected?.max}
+        </p>
+      )}
     </div>
   );
 };

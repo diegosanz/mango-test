@@ -53,6 +53,7 @@ const RangeStyles = styled.div`
       flex-direction: column;
       justify-content: center;
       margin: 0 1em;
+      min-width: 100px;
 
       &__control {
         position: absolute;
@@ -67,7 +68,7 @@ const RangeStyles = styled.div`
   }
 `;
 
-interface RangeProps {
+export interface RangeProps {
   options?: number[] | MinMax;
   value?: MinMax;
   onChange?: (e: MinMax) => void;
@@ -85,18 +86,10 @@ interface RangeState {
   minPos: number;
   maxPos: number;
   disabled: boolean;
+  minVal: number;
+  maxVal: number;
+  lastActiveControl?: RangeControls;
 }
-
-const rangeStateDefault: RangeState = {
-  inputEditable: true,
-  limitMin: 0,
-  limitMax: 0,
-  options: [],
-  released: true,
-  minPos: 0,
-  maxPos: 100,
-  disabled: false,
-};
 
 const Range: FC<RangeProps> = ({
   options,
@@ -108,37 +101,37 @@ const Range: FC<RangeProps> = ({
   const rangeBarRef = useRef<HTMLDivElement>(null);
 
   const [rangeState, setRangeState] = useState<RangeState>({
-    ...rangeStateDefault,
-  });
-
-  const [lastActiveControl, setLastActiveControl] = useState<RangeControls>();
-
-  const [val, setVal] = useState<MinMax>({
-    min: 0,
-    max: 0,
+    inputEditable: true,
+    limitMin: 0,
+    limitMax: 0,
+    options: [],
+    released: true,
+    minPos: 0,
+    maxPos: 100,
+    disabled: false,
+    minVal: 0,
+    maxVal: 0,
+    lastActiveControl: undefined,
   });
 
   useEffect(() => {
-    let rangeStateTemp: RangeState = { ...rangeStateDefault };
-
-    if (!options || disabled) {
-      setRangeState({
-        ...rangeStateTemp,
-        disabled: true,
-        inputEditable: false,
-      });
-    }
+    let newOptions: RangeValue[];
+    let inputEditable = false;
 
     if (!options) {
+      setRangeState((oldRangeState) => {
+        return {
+          ...oldRangeState,
+          disabled: true,
+          inputEditable: false,
+        };
+      });
       return;
     }
 
     if (Array.isArray(options)) {
-      rangeStateTemp = {
-        ...rangeStateTemp,
-        inputEditable: false,
-        options: generatePercentages(options),
-      };
+      inputEditable = false;
+      newOptions = generatePercentages(options);
     } else if (options && !isNaN(options?.max) && !isNaN(options?.min)) {
       // Validate that in fact `min` is minor than `max`
       const min = Math.min(options.min, options.max);
@@ -149,43 +142,43 @@ const Range: FC<RangeProps> = ({
         steps = [...steps, i];
       }
 
-      rangeStateTemp = {
-        ...rangeStateTemp,
-        inputEditable: true,
-        options: generatePercentages(steps),
-      };
+      inputEditable = true;
+      newOptions = generatePercentages(steps);
     } else {
-      rangeStateTemp = {
-        ...rangeStateTemp,
-      };
+      throw new Error("options must be number[] or {min: number, max: number}");
     }
 
-    const limitMin = rangeStateTemp.options[0]?.value;
-    const limitMax =
-      rangeStateTemp.options[rangeStateTemp.options.length - 1]?.value;
-    const min = value?.min ?? limitMin;
-    const max = value?.max ?? limitMax;
+    if (newOptions) {
+      const limitMin = newOptions[0]?.value;
+      const limitMax = newOptions[newOptions.length - 1]?.value;
+      const minVal = value?.min ?? limitMin;
+      const maxVal = value?.max ?? limitMax;
 
-    setVal({
-      min,
-      max,
-    });
-
-    setRangeState({
-      ...rangeStateTemp,
-      limitMin,
-      limitMax,
-      maxPos: closestRangeValueByValue(max, rangeStateTemp.options).percent,
-      minPos: closestRangeValueByValue(min, rangeStateTemp.options).percent,
-    });
+      setRangeState((oldRangeState) => {
+        return {
+          ...oldRangeState,
+          limitMin,
+          limitMax,
+          minVal,
+          maxVal,
+          maxPos: closestRangeValueByValue(maxVal, newOptions).percent,
+          minPos: closestRangeValueByValue(minVal, newOptions).percent,
+          inputEditable,
+          options: newOptions,
+          disabled: !!disabled,
+        };
+      });
+    }
   }, [options, value, disabled]);
 
   const onStartMoving = (el: RangeControls) => {
-    setRangeState({
-      ...rangeState,
-      released: false,
+    setRangeState((oldRangeState) => {
+      return {
+        ...oldRangeState,
+        released: false,
+        lastActiveControl: el,
+      };
     });
-    setLastActiveControl(el);
   };
 
   const onMoving = (
@@ -212,7 +205,7 @@ const Range: FC<RangeProps> = ({
           percentaje = 0;
         }
 
-        if (lastActiveControl === RangeControls.MIN) {
+        if (rangeState.lastActiveControl === RangeControls.MIN) {
           if (percentaje > rangeState.maxPos) {
             percentaje = rangeState.maxPos;
           }
@@ -222,16 +215,15 @@ const Range: FC<RangeProps> = ({
             rangeState.options
           );
 
-          setRangeState({
-            ...rangeState,
-            minPos: percentaje,
+          setRangeState((oldRangeState) => {
+            return {
+              ...oldRangeState,
+              minPos: percentaje,
+              lastActiveControl: RangeControls.MIN,
+              minVal: minValue.value,
+            };
           });
-          setLastActiveControl(RangeControls.MIN);
-          setVal({
-            ...val,
-            min: minValue.value,
-          });
-        } else if (lastActiveControl === RangeControls.MAX) {
+        } else if (rangeState.lastActiveControl === RangeControls.MAX) {
           if (percentaje < rangeState.minPos) {
             percentaje = rangeState.minPos;
           }
@@ -241,14 +233,13 @@ const Range: FC<RangeProps> = ({
             rangeState.options
           );
 
-          setRangeState({
-            ...rangeState,
-            maxPos: percentaje,
-          });
-          setLastActiveControl(RangeControls.MAX);
-          setVal({
-            ...val,
-            max: maxValue.value,
+          setRangeState((oldRangeState) => {
+            return {
+              ...oldRangeState,
+              maxPos: percentaje,
+              lastActiveControl: RangeControls.MAX,
+              maxVal: maxValue.value,
+            };
           });
         }
       }
@@ -266,16 +257,15 @@ const Range: FC<RangeProps> = ({
         rangeState.options
       );
 
-      setRangeState({
-        ...rangeState,
-        released: true,
-        minPos: minValue.percent,
-        maxPos: maxValue.percent,
-      });
-
-      setVal({
-        min: minValue.value,
-        max: maxValue.value,
+      setRangeState((oldRangeState) => {
+        return {
+          ...oldRangeState,
+          released: true,
+          minPos: minValue.percent,
+          maxPos: maxValue.percent,
+          minVal: minValue.value,
+          maxVal: maxValue.value,
+        };
       });
 
       emitValue({
@@ -296,8 +286,8 @@ const Range: FC<RangeProps> = ({
   const handleTextInputMin = (ev: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = ev.target.valueAsNumber;
 
-    if (newValue > val.max) {
-      newValue = val.max;
+    if (newValue > rangeState.maxVal) {
+      newValue = rangeState.maxVal;
     }
 
     const newRangeValue = closestRangeValueByValue(
@@ -305,19 +295,17 @@ const Range: FC<RangeProps> = ({
       rangeState.options
     );
 
-    setVal({
-      ...val,
-      min: newRangeValue.value,
+    setRangeState((oldRangeState) => {
+      return {
+        ...oldRangeState,
+        minPos: newRangeValue.percent,
+        minVal: newRangeValue.value,
+        lastActiveControl: RangeControls.MIN,
+      };
     });
-
-    setRangeState({
-      ...rangeState,
-      minPos: newRangeValue.percent,
-    });
-    setLastActiveControl(RangeControls.MIN);
 
     emitValue({
-      ...val,
+      max: rangeState.maxVal,
       min: newRangeValue.value,
     });
   };
@@ -325,8 +313,8 @@ const Range: FC<RangeProps> = ({
   const handleTextInputMax = (ev: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = ev.target.valueAsNumber;
 
-    if (newValue < val.min) {
-      newValue = val.min;
+    if (newValue < rangeState.minVal) {
+      newValue = rangeState.minVal;
     }
 
     const newRangeValue = closestRangeValueByValue(
@@ -334,27 +322,25 @@ const Range: FC<RangeProps> = ({
       rangeState.options
     );
 
-    setVal({
-      ...val,
-      max: newRangeValue.value,
+    setRangeState((oldRangeState) => {
+      return {
+        ...oldRangeState,
+        maxPos: newRangeValue.percent,
+        maxVal: newRangeValue.value,
+        lastActiveControl: RangeControls.MAX,
+      };
     });
-
-    setRangeState({
-      ...rangeState,
-      maxPos: newRangeValue.percent,
-    });
-    setLastActiveControl(RangeControls.MAX);
 
     emitValue({
-      ...val,
       max: newRangeValue.value,
+      min: rangeState.minVal,
     });
   };
 
   return (
     <RangeStyles>
       <div
-        className={`range ${rangeState.disabled ? "m-disabled" : null}`}
+        className={`range ${rangeState.disabled ? "m-disabled" : ""}`}
         onMouseMove={(ev) => {
           onMoving(ev);
         }}
@@ -363,15 +349,18 @@ const Range: FC<RangeProps> = ({
         }}
         onTouchEnd={onStopMoving}
         onTouchCancel={onStopMoving}
+        aria-label="range-selector"
       >
         <InvisibleInput
-          value={val.min}
+          value={rangeState.minVal}
           onChange={handleTextInputMin}
           unit={unit}
-          disabled={!rangeState.inputEditable}
+          disabled={!rangeState.inputEditable || disabled}
+          ariaLabel="range input min"
         />
         <div className="range__bar" ref={rangeBarRef}>
           <RangeControl
+            aria-label="range control min"
             onMouseDown={() => {
               onStartMoving(RangeControls.MIN);
             }}
@@ -380,12 +369,14 @@ const Range: FC<RangeProps> = ({
             }}
             className="range__bar__control m-min"
             style={{
-              zIndex: lastActiveControl === RangeControls.MIN ? 1 : 0,
+              zIndex:
+                rangeState.lastActiveControl === RangeControls.MIN ? 1 : 0,
               left: `${rangeState.minPos}%`,
             }}
           />
 
           <RangeControl
+            aria-label="range control max"
             onMouseDown={() => {
               onStartMoving(RangeControls.MAX);
             }}
@@ -394,7 +385,8 @@ const Range: FC<RangeProps> = ({
             }}
             className="range__bar__control m-max"
             style={{
-              zIndex: lastActiveControl === RangeControls.MAX ? 1 : 0,
+              zIndex:
+                rangeState.lastActiveControl === RangeControls.MAX ? 1 : 0,
               left: `${rangeState.maxPos}%`,
             }}
           />
@@ -403,10 +395,11 @@ const Range: FC<RangeProps> = ({
         </div>
 
         <InvisibleInput
-          value={val.max}
+          value={rangeState.maxVal}
           onChange={handleTextInputMax}
           unit={unit}
-          disabled={!rangeState.inputEditable}
+          disabled={!rangeState.inputEditable || disabled}
+          ariaLabel="range input max"
         />
       </div>
     </RangeStyles>
