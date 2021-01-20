@@ -1,6 +1,7 @@
 {
   "name": "mango-test",
   "version": "0.1.0",
+  "author": "Diego Sanz",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
@@ -25,7 +26,9 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "test": "yarn test:e2e && yarn test:unit",
+    "test:unit": "react-app-rewired test",
+    "test:e2e": "jest --runInBand e2e",
     "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
@@ -49,6 +52,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
+    "@types/puppeteer": "^5.4.2",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.11",
@@ -57,6 +61,8 @@
     "@types/react-test-renderer": "^16.9.3",
     "@types/styled-components": "^5.1.4",
     "@types/webpack-env": "^1.15.3",
+    "pptr-testing-library": "^0.6.4",
+    "puppeteer": "^5.5.0",
     "react-test-renderer": "^17.0.1"
   }
 }

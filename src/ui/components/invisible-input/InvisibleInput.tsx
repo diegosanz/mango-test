@@ -32,11 +32,12 @@ const InvisibleInputContainer = styled.div`
   }
 `;
 
-interface InvisibleInputProps {
+export interface InvisibleInputProps {
   value: number;
   unit?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  ariaLabel?: string;
 }
 
 const InvisibleInput: FC<InvisibleInputProps> = ({
@@ -44,6 +45,7 @@ const InvisibleInput: FC<InvisibleInputProps> = ({
   unit,
   onChange,
   disabled,
+  ariaLabel,
 }) => {
   const [internalValue, setInternalValue] = useState(value.toString());
 
@@ -71,6 +73,7 @@ const InvisibleInput: FC<InvisibleInputProps> = ({
         className="span-input"
         type="number"
         value={internalValue}
+        aria-label={ariaLabel}
         onChange={(ev) => handleOnChange(ev)}
         onBlur={(ev) => handleOnBlur(ev)}
         style={{

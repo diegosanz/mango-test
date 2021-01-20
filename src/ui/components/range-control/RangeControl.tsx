@@ -8,6 +8,7 @@ const RangeControl = styled.div`
   background-color: #000;
   transform: translate(-50%, 0);
   transition: width 0.25s, height 0.25s;
+  touch-action: none;
 
   &:hover {
     width: 2.25em;
