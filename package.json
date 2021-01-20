@@ -1,6 +1,7 @@
 {
   "name": "mango-test",
   "version": "0.1.0",
+  "author": "Diego Sanz",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",

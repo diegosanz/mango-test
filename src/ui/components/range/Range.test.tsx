@@ -73,6 +73,11 @@ describe("Range props", () => {
   });
 });
 
+// ------------------------------------------------------- //
+//
+// THIS TEST ARE BETTER TESTED IN E2E TESTS WITH PUPPETEER
+//
+// ------------------------------------------------------- //
 describe("Range controls", () => {
   test("should min value on top when used", () => {
     const { minControl, maxControl } = setup();

@@ -1,13 +1,8 @@
 # Mango range
 
-Esta es la prueba de Diego Sanz para hacer un componente Range partiendo de cero en React.
+Esta es la prueba de [Diego Sanz](mailto:dsanz@hiberus.com) para hacer un componente Range partiendo de cero en React.
 
-Este proyecto ha sido creado con Create React App, utilizando como lenguaje Typescript en modo estricto. Como librerías destacables se encuentran:
-
-- [Styled components](https://styled-components.com/): Es la solución elegida para la maquetación CSS. Se utiliza una sintaxis como basada en SCSS y siguiendo un patrón [BEM](http://getbem.com/). He escogido esta librería ya que otorga mucha potencia y flexibilidad en el diseño.
-- [Redux toolkit](https://redux-toolkit.js.org/): Utilizado para implementar el patrón Flux en el estado de la aplicación. En este proyecto quizás sea mucha sobreingeniería crear toda esta estructura, pero se hace a modo ilustrativo de como se haría una aplicación real. He utilizado esta librería porque simplifica mucho el trabajo evitando escribir demasiado código y además mantiene el tipo de Typescript en todas las operaciones.
-- [React app rewired](https://github.com/timarney/react-app-rewired): Para evitar hacer un `eject` del React Create App y poder añadir añadir el _refresco en caliente_ utilizo esta librería. Nos permite realizar cambios en el código evitando reacargar al completo la app. Aparte del aumento de la velocidad para probar los nuevos cambios, también mantiene el estado de la aplicación entre cambios.
-- [Axios](https://github.com/axios/axios): Librería utilizada para hacer las llamadas necesarias a la API.
+Este proyecto ha sido creado con Create React App, utilizando Typescript en modo estricto y haciendo uso de Styled Components para la maquetación.
 
 ## Instalación
 
@@ -15,10 +10,10 @@ Este proyecto ha sido creado con Create React App, utilizando como lenguaje Type
 2. Cambiarse a la carpeta del proyecto.
 3. Ejecutar `yarn` para instalar las dependencias.
 
-## Comandos útiles
+## Comandos
 
 - `yarn start`: lanza el servidor de desarrollo para poder probar y seguir programando la aplicación.
-- `yarn test`: ejecuta los test.
+- `yarn test`: ejecuta los test e2e y unitarios. Existen las opciones `yarn test:e2e` y `yarn test:unit` para ejecutarlos individualmente.
 - `yarn build`: prepara y optimiza la aplicación para lanzarla en producción.
 
 ## Uso del componente
@@ -33,6 +28,16 @@ Para usar el componente sólo hay que importarlo. Sus propiedades son:
 
 ## Consideraciones
 
+### Alcance de la prueba
+
+Al ser una prueba, y para no extenderla demasiado en el tiempo, se ha optado por no realizar la covertura de test al completo ya que los casos más significativos sí que están testados. Tampoco se ha invertido tiempo en el diseño más allá de la maquetación del componente `<Range>`.
+
+Leer el apartado [Posibles mejoras](#posibles-mejoras) para más información.
+
+### Admisión de máximo y mínimo iguales
+
+Se ha diseñado con la idea de que ambos valores máximo y mínimo puedan ser iguales, de manera que se filtraría por un número específico.
+
 ### Rango relativo
 
 En el Range que recibe como `options` valores predefinidos en un array, he optado por que cada valor esté situado en base al 100% del total. De esta forma el valor más pequeño es un 1 y el mayor es un 100, el valor 50 estará situado en la mitad. Al soltar el control este se moverá para ajustarse a su posición.
@@ -44,6 +49,8 @@ Se han duplicado y gestionado varios estados en algunos elementos de la app para
 ### Diseño responsive
 
 Se ha optado por un diseño responsive de todo el componente. Por defecto ocupa el 100% del ancho y será su contenedor el encargado de limitar su tamaño. Los campos de texto también han sido diseñados para adaptarse al tamaño del texto que contienen. Además, se puede cambiar el tamaño de la ventana en cualquier momento sin que los valores se vean afectados o sin que haya que hacer recálculos internos.
+
+Si este diseño no fuera el adecuado, se podría modificar facilmente dando un ancho con CSS a la clase `.range` para dárselo a todo el componente o a `.range__bar` para dárselo a la parte deslizable sin contar los inputs de texto.
 
 ### Api de mokable
 
@@ -62,3 +69,9 @@ Como se sugería en el PDF de la prueba, he usado la web de mokable para crear l
     "values":  [1.99, 5.99, 10.99, 30.99, 50.99, 70.99]
 }
 ```
+
+## Posibles mejoras
+
+- Sólo se ha hecho un test E2E con Puppeteer probando edición con los inputs, movimiento con los controles y comprobando que un control no sobrepase al otro, pero podrían hacerse más test probando el ejercicio 2 o distintas combinaciones de modificación del componente.
+- Poner un control `pre-commit` con [Husky](https://typicode.github.io/husky/#/) para realizar los test y verificar que siempre se suben cambios testados al repositorio.
+- Añadir un [storybook](https://storybook.js.org/) para poder añadirlo a nuestro catálogo de componentes.
