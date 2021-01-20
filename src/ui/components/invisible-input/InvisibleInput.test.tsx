@@ -38,7 +38,7 @@ describe("InvisibleInput operations", () => {
     expect(input).toHaveValue(null);
   });
 
-  test("should only allow numbers", () => {
+  test("should allow numbers", () => {
     const { input } = setup();
 
     userEvent.clear(input);
@@ -47,7 +47,7 @@ describe("InvisibleInput operations", () => {
     expect(input).toHaveValue(12);
   });
 
-  test("should not other characters", () => {
+  test("should not allow non numeric characters", () => {
     const { input } = setup();
 
     userEvent.clear(input);
