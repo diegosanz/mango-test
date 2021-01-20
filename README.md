@@ -72,6 +72,6 @@ Como se sugería en el PDF de la prueba, he usado la web de mokable para crear l
 
 ## Posibles mejoras
 
-- Sólo se ha hecho un test E2E con Puppeteer probando edición con los inputs, movimiento con los controles y comprobando que un control no sobrepase al otro, pero podrían hacerse más test probando el ejercicio 2 o distintas combinaciones de modificación del componente.
+- Sólo se han hecho test E2E con Puppeteer probando los conceptos más relevantes. Se podría extender para probar otras combinaciones de manipulación del range, probar el ejercicio 2, etcétera, pero en esencia sería lo mismo que los test ya creados.
 - Poner un control `pre-commit` con [Husky](https://typicode.github.io/husky/#/) para realizar los test y verificar que siempre se suben cambios testados al repositorio.
 - Añadir un [storybook](https://storybook.js.org/) para poder añadirlo a nuestro catálogo de componentes.
